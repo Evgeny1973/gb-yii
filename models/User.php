@@ -23,12 +23,9 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface {
      * {@inheritdoc}
      */
     public static function findIdentityByAccessToken($token, $type = null) {
-        foreach (Users::find()->asArray() as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
+        if ($user = Users::findOne($token)) {
+            return new static($user->toArray());
         }
-
         return null;
     }
 
