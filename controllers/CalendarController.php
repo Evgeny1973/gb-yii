@@ -12,13 +12,11 @@ use yii\filters\VerbFilter;
 /**
  * CalendarController implements the CRUD actions for Calendar model.
  */
-class CalendarController extends Controller
-{
+class CalendarController extends Controller {
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::class,
@@ -33,10 +31,23 @@ class CalendarController extends Controller
      * Lists all Calendar models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new CalendarSearch();
+    public function actionIndex() {
+        $searchModel = new CalendarSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionMy() {
+        $searchModel = new CalendarSearch;
+        $dataProvider = $searchModel->search([
+            'CalendarSearch' => [
+                'creator' => \Yii::$app->user->id,
+            ]
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -50,8 +61,7 @@ class CalendarController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -62,9 +72,8 @@ class CalendarController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Calendar();
+    public function actionCreate() {
+        $model = new Calendar;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -82,8 +91,7 @@ class CalendarController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -102,8 +110,7 @@ class CalendarController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -116,8 +123,7 @@ class CalendarController extends Controller
      * @return Calendar the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = Calendar::findOne($id)) !== null) {
             return $model;
         }

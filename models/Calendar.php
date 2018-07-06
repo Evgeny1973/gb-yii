@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "calendar".
@@ -13,22 +14,20 @@ use Yii;
  * @property string $creator Автор заметки
  * @property string $event_date Дата события
  * @property string $creation_date Дата внесения
+ * @property User $author
  */
-class Calendar extends \yii\db\ActiveRecord
-{
+class Calendar extends \yii\db\ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'calendar';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'text', 'event_date'], 'required'],
             [['text'], 'string'],
@@ -41,8 +40,7 @@ class Calendar extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'name' => 'Название',
@@ -53,7 +51,20 @@ class Calendar extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getUser(){
-        return $this->hasOne(User::class, ['id' => 'user_id']);
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuthor(): ActiveQuery {
+        return $this->hasOne(Users::class, ['id' => 'creator']);
     }
+
+    public function beforeSave($insert) {
+        $result = parent::beforeSave($insert);
+        if (!$this->creator) {
+            $this->creator = \Yii::$app->user->id;
+        }
+        return $result;
+    }
+
+
 }

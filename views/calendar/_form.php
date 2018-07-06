@@ -17,9 +17,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'creator')->dropDownList(
-            \app\models\Users::find()->select(['login'])->indexBy('id')->column()) ?>
-
     <?= $form->field($model, 'event_date')->textInput() ?>
 
     <div class="form-group">
