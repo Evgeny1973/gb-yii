@@ -65,6 +65,4 @@ class Calendar extends \yii\db\ActiveRecord {
         }
         return $result;
     }
-
-
 }

@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Calendar;
 use app\models\CalendarSearch;
+use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -18,6 +20,16 @@ class CalendarController extends Controller {
      */
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['my', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'roles' => ['@'],
+                        'allow' => true,
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
@@ -111,7 +123,12 @@ class CalendarController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id) {
-        $this->findModel($id)->delete();
+        try {
+            $this->findModel($id)->delete();
+        } catch (StaleObjectException $e) {
+        } catch (NotFoundHttpException $e) {
+        } catch (\Throwable $e) {
+        }
 
         return $this->redirect(['index']);
     }

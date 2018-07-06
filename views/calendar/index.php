@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'text:ntext',
-            'creator',
+            'author.login',
             'event_date',
             //'creation_date',
 
