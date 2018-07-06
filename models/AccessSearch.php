@@ -2,10 +2,8 @@
 
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Access;
 
 /**
  * AccessSearch represents the model behind the search form of `app\models\Access`.
@@ -15,7 +13,7 @@ class AccessSearch extends Access
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'user_id', 'event_id'], 'integer'],

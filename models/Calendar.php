@@ -15,7 +15,9 @@ use yii\db\ActiveQuery;
  * @property string $event_date Дата события
  * @property string $creation_date Дата внесения
  * @property User $author
+ * @property Access[] $accesses
  */
+
 class Calendar extends \yii\db\ActiveRecord {
     /**
      * {@inheritdoc}
@@ -52,12 +54,23 @@ class Calendar extends \yii\db\ActiveRecord {
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getAuthor(): ActiveQuery {
         return $this->hasOne(Users::class, ['id' => 'creator']);
     }
 
+    /**
+     * @return ActiveQuery
+     */
+    public function getAccess(): ActiveQuery {
+        return $this->hasMany(Access::class, ['event_id' => 'id']);
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
     public function beforeSave($insert) {
         $result = parent::beforeSave($insert);
         if (!$this->creator) {

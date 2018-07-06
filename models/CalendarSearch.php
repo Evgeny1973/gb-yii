@@ -2,21 +2,17 @@
 
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Calendar;
 
 /**
  * CalendarSearch represents the model behind the search form of `app\models\Calendar`.
  */
-class CalendarSearch extends Calendar
-{
+class CalendarSearch extends Calendar {
     /**
      * {@inheritdoc}
      */
-    public function rules(): array
-    {
+    public function rules(): array {
         return [
             [['id'], 'integer'],
             [['name', 'text', 'creator', 'event_date', 'creation_date'], 'safe'],
@@ -26,8 +22,7 @@ class CalendarSearch extends Calendar
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -39,8 +34,7 @@ class CalendarSearch extends Calendar
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = Calendar::find();
 
         // add conditions that should always apply here
@@ -62,7 +56,10 @@ class CalendarSearch extends Calendar
             'id' => $this->id,
             'event_date' => $this->event_date,
             'creation_date' => $this->creation_date,
+            'access.user_id' => $params['user_id'] ?? '',
         ]);
+
+        $query->joinWith('access');
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'text', $this->text])

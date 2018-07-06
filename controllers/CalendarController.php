@@ -53,13 +53,28 @@ class CalendarController extends Controller {
         ]);
     }
 
-    public function actionMy() {
+    /**
+     * @return string
+     */
+    public function actionMy(): string {
         $searchModel = new CalendarSearch;
         $dataProvider = $searchModel->search([
             'CalendarSearch' => [
                 'creator' => \Yii::$app->user->id,
             ]
         ]);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function actionShared(): string {
+        $searchModel = new CalendarSearch;
+        $dataProvider = $searchModel->search(['user_id' => \Yii::$app->user->id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -144,7 +159,6 @@ class CalendarController extends Controller {
         if (($model = Calendar::findOne($id)) !== null) {
             return $model;
         }
-
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }
