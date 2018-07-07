@@ -2,12 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\Access;
 use Yii;
 use app\models\Calendar;
 use app\models\CalendarSearch;
 use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -22,7 +24,7 @@ class CalendarController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['my', 'create', 'update', 'delete'],
+                'only' => ['my', 'create', 'update', 'delete', 'shared'],
                 'rules' => [
                     [
                         'roles' => ['@'],
@@ -87,10 +89,22 @@ class CalendarController extends Controller {
      * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws ForbiddenHttpException
      */
     public function actionView($id) {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $model = $this->findModel($id);
+        if (!$model){
+            throw new NotFoundHttpException('Заметка не найдена.');
+        }
+
+        $level = Access::getAccessLevel($model);
+        if ($level === Access::LEVEL_DENIED){
+            throw new ForbiddenHttpException('У вас нет досупа к этой заметке.');
+        }
+
+        $viewName = $level === Access::LEVEL_EDIT ? 'view' : 'view-guest';
+        return $this->render($viewName, [
+            'model' => $model,
         ]);
     }
 

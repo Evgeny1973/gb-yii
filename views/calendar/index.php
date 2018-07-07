@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\CalendarSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Calendars';
+$this->title = 'События';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="calendar-index">
@@ -27,7 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'text:ntext',
-            'author.login',
+            ['label' => 'Автор',
+             'attribute' => 'author.login'],
+            //'author.login',
             'event_date',
             //'creation_date',
 
