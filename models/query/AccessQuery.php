@@ -65,8 +65,18 @@ class AccessQuery extends ActiveQuery {
      * @param int $userID
      * @return self
      */
-    public function forUserId(int $userID): self{
+    public function forUserId(int $userID): self {
         $this->andWhere(['user_id' => $userID]);
+        return $this;
+    }
+
+    public function forCurrentDate(): self {
+        $date = date('Y-m-d');
+        $this->andWhere([
+            'or',
+            ['<=', 'since', $date],
+            ['since' => null],
+        ]);
         return $this;
     }
 }

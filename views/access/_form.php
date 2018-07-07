@@ -1,5 +1,7 @@
 <?php
 
+use app\models\Calendar;
+use app\models\Users;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -10,13 +12,19 @@ use yii\widgets\ActiveForm;
 
 <div class="access-form">
 
+
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->errorSummary($model); ?>
+
     <?= $form->field($model, 'user_id')->dropDownList(
-        \app\models\Users::find()->select(['login'])->indexBy('id')->column()) ?>
+        Users::find()->select(['login'])->indexBy('id')->column()) ?>
 
     <?= $form->field($model, 'event_id')->dropDownList(
-        \app\models\Calendar::find()->select(['name'])->indexBy('id')->column()) ?>
+        Calendar::find()->select(['name'])->indexBy('id')->column()) ?>
+
+    <?= $form->field($model, 'since')->textInput(['type' => 'date']); ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

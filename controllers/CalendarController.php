@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Access;
+use app\objects\CheckCalendarAccess;
 use Yii;
 use app\models\Calendar;
 use app\models\CalendarSearch;
@@ -97,7 +98,7 @@ class CalendarController extends Controller {
             throw new NotFoundHttpException('Заметка не найдена.');
         }
 
-        $level = Access::getAccessLevel($model);
+        $level = (new CheckCalendarAccess)->execute($model);
         if ($level === Access::LEVEL_DENIED){
             throw new ForbiddenHttpException('У вас нет досупа к этой заметке.');
         }

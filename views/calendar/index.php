@@ -1,7 +1,10 @@
 <?php
 
+use app\models\Access;
+use app\models\Calendar;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\objects\CheckCalendarAccess;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\CalendarSearch */
@@ -28,12 +31,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'text:ntext',
             ['label' => 'Автор',
-             'attribute' => 'author.login'],
-            //'author.login',
+                'attribute' => 'author.login'],
             'event_date',
-            //'creation_date',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'update' => function ($url, Calendar $model) {
+                        return (new CheckCalendarAccess)->execute($model) == Access::LEVEL_EDIT ? Html::a('Update', $url) : '';
+                    }
+                ]
+            ],
         ],
     ]); ?>
 </div>

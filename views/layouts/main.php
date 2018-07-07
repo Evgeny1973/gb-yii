@@ -38,7 +38,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'Access', 'url' => ['/access']],
             ['label' => 'Календарь', 'url' => ['/calendar']],
             ['label' => 'My', 'url' => ['/calendar/my']],
             ['label' => 'Shared', 'url' => ['/calendar/shared']],

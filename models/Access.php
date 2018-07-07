@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  * @property string $id
  * @property int $user_id
  * @property int $event_id
+ * @property string $since
  */
 class Access extends ActiveRecord {
 
@@ -31,6 +32,7 @@ class Access extends ActiveRecord {
     public function rules(): array {
         return [
             [['user_id', 'event_id'], 'required'],
+            ['since', 'safe'],
             [['user_id', 'event_id'], 'integer'],
         ];
     }
@@ -43,35 +45,11 @@ class Access extends ActiveRecord {
             'id' => 'ID',
             'user_id' => 'User ID',
             'event_id' => 'Event ID',
+            'since' => 'Доступно с',
         ];
     }
 
-    /**
-     * Уровень доступа к заметке
-     * @param Calendar $model
-     * @return int
-     */
-    public static function getAccessLevel(Calendar $model) {
-        $authorId = (int)$model->creator;
-        $userId = (int)\Yii::$app->user->id;
-
-        if ($authorId == $userId) {
-            return self::LEVEL_EDIT;
-        }
-
-        $accessCalendar = self::find()
-            ->forCalendar($model)
-            ->forUserId($userId)
-            ->one();
-
-        if ($accessCalendar) {
-            return self::LEVEL_VIEW;
-        }
-        return self::LEVEL_DENIED;
-    }
-
-
-    /**
+        /**
      * @return AccessQuery
      */
     public static function find(): AccessQuery {
