@@ -171,6 +171,8 @@ class CalendarController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
+        $cache = \Yii::$app->cache->get('calendar');
+
         if (($model = Calendar::findOne($id)) !== null) {
             return $model;
         }
