@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Access;
 use app\models\AccessSearch;
+use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,13 +13,11 @@ use yii\filters\VerbFilter;
 /**
  * AccessController implements the CRUD actions for Access model.
  */
-class AccessController extends Controller
-{
+class AccessController extends Controller {
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::class,
@@ -33,9 +32,8 @@ class AccessController extends Controller
      * Lists all Access models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new AccessSearch();
+    public function actionIndex() {
+        $searchModel = new AccessSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -50,8 +48,7 @@ class AccessController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -62,9 +59,8 @@ class AccessController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Access();
+    public function actionCreate() {
+        $model = new Access;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -82,8 +78,7 @@ class AccessController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -102,9 +97,13 @@ class AccessController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    public function actionDelete($id) {
+        try {
+            $this->findModel($id)->delete();
+        } catch (StaleObjectException $e) {
+        } catch (NotFoundHttpException $e) {
+        } catch (\Throwable $e) {
+        }
 
         return $this->redirect(['index']);
     }
@@ -116,12 +115,18 @@ class AccessController extends Controller
      * @return Access the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
+        $key = 'access' . $id;
+        $cachedAccess = \Yii::$app->cache->get($key);
+        if ($cachedAccess !== false){
+            return $cachedAccess;
+        }
+
         if (($model = Access::findOne($id)) !== null) {
+            \Yii::$app->cache->set($key, $model, 30);
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('Запрошенная страница не найдена.');
     }
 }

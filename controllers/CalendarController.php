@@ -94,12 +94,12 @@ class CalendarController extends Controller {
      */
     public function actionView($id) {
         $model = $this->findModel($id);
-        if (!$model){
+        if (!$model) {
             throw new NotFoundHttpException('Заметка не найдена.');
         }
 
         $level = (new CheckCalendarAccess)->execute($model);
-        if ($level === Access::LEVEL_DENIED){
+        if ($level === Access::LEVEL_DENIED) {
             throw new ForbiddenHttpException('У вас нет досупа к этой заметке.');
         }
 
@@ -171,11 +171,13 @@ class CalendarController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        $cache = \Yii::$app->cache->get('calendar');
-
-        if (($model = Calendar::findOne($id)) !== null) {
+        if (($model = Calendar::find()
+                ->andWhere(['id' => $id])
+                ->cache(30)
+                ->one())
+            !== null) {
             return $model;
         }
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('Запрошенная страница не найдена.');
     }
 }
