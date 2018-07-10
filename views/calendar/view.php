@@ -41,5 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
 
         <?php $this->endCache(); ?>
+
     <?php endif; ?>
 </div>
