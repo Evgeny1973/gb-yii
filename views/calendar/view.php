@@ -25,17 +25,21 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'name',
-            'text:ntext',
-            ['label' => 'Автор',
-            'attribute' => 'author.login'],
-            'event_date',
-            'creation_date',
-        ],
-    ]) ?>
+    <?php if ($this->beginCache('calendar_view', ['duration' => 30])): ?>
 
+        <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                'id',
+                'name',
+                'text:ntext',
+                ['label' => 'Автор',
+                    'attribute' => 'author.login'],
+                'event_date',
+                'creation_date',
+            ],
+        ]) ?>
+
+        <?php $this->endCache(); ?>
+    <?php endif; ?>
 </div>

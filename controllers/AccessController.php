@@ -95,7 +95,6 @@ class AccessController extends Controller {
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id) {
         try {
