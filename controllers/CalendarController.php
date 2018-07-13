@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Access;
+use app\models\form\CalendarForm;
 use app\objects\CheckCalendarAccess;
 use Yii;
 use app\models\Calendar;
@@ -115,7 +116,7 @@ class CalendarController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
-        $model = new Calendar;
+        $model = new CalendarForm;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -171,7 +172,7 @@ class CalendarController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Calendar::find()
+        if (($model = CalendarForm::find()
                 ->andWhere(['id' => $id])
                 ->cache(30)
                 ->one())

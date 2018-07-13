@@ -14,6 +14,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm' => '@vendor/npm-asset',
     ],
+    'language' => 'ru-RU',
     'components' => [
         'request' => [
             'cookieValidationKey' => 'OZpqkUwcy88Rb-e1b9aJ1E8E2XfKtaLB',

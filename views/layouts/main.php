@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\widgets\Alert;
@@ -38,19 +39,23 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Access', 'url' => ['/access']],
-            ['label' => 'Календарь', 'url' => ['/calendar']],
-            ['label' => 'My', 'url' => ['/calendar/my']],
-            ['label' => 'Shared', 'url' => ['/calendar/shared']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            [
+                'label' => 'Календарь',
+                'items' => [
+                    ['label' => 'Все заметки', 'url' => ['/calendar']],
+                    ['label' => 'Мои заметки', 'url' => ['/calendar/my']],
+                    ['label' => 'Доступные мне', 'url' => ['/calendar/shared']],
+                    ['label' => 'Установка доступа', 'url' => ['/access']],
+                ]
+            ],
+
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+            ['label' => 'Вход', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    'Выход (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()

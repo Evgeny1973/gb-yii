@@ -1,10 +1,14 @@
 <?php
 
+use app\models\Users;
+use yii\helpers\BaseArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+$users = BaseArrayHelper::map(Users::find()->all(), 'id', 'login');
+
 /* @var $this yii\web\View */
-/* @var $model app\models\Calendar */
+/* @var $model app\models\form\CalendarForm */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -18,6 +22,9 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'event_date')->textInput(['type' => 'date']) ?>
+
+    <?= $form->field($model, 'grantedTo')->dropDownList($users,
+        ['multiple' => true]); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
