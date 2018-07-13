@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июл 07 2018 г., 20:00
+-- Время создания: Июл 13 2018 г., 15:11
 -- Версия сервера: 5.7.20
 -- Версия PHP: 7.2.0
 
@@ -43,7 +43,11 @@ INSERT INTO `access` (`id`, `user_id`, `event_id`, `since`) VALUES
 (1, 3, 1, '2018-07-28'),
 (2, 2, 1, NULL),
 (3, 3, 2, NULL),
-(4, 4, 3, '2018-08-28');
+(4, 4, 3, '2018-08-28'),
+(5, 1, 4, NULL),
+(6, 1, 2, '2018-07-20'),
+(7, 2, 1, NULL),
+(8, 4, 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -149,7 +153,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `access`
 --
 ALTER TABLE `access`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT для таблицы `calendar`

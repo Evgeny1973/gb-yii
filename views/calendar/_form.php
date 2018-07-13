@@ -24,7 +24,9 @@ $users = BaseArrayHelper::map(Users::find()->all(), 'id', 'login');
     <?= $form->field($model, 'event_date')->textInput(['type' => 'date']) ?>
 
     <?= $form->field($model, 'grantedTo')->dropDownList($users,
-        ['multiple' => true]); ?>
+        [
+            'multiple' => true,
+        ]); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
