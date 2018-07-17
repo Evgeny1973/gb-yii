@@ -1,0 +1,3 @@
+# очиста таблицы user_log раз в сутки в полночь
+
+* 0 */1 * * php /Users/evgeny/gb-yii.local/yii user-log/clean
