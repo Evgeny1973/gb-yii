@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июл 13 2018 г., 15:11
+-- Время создания: Июл 17 2018 г., 13:55
 -- Версия сервера: 5.7.20
 -- Версия PHP: 7.2.0
 
@@ -92,7 +92,8 @@ CREATE TABLE `migration` (
 
 INSERT INTO `migration` (`version`, `apply_time`) VALUES
 ('m000000_000000_base', 1530975129),
-('m180707_130819_add_date_column_to_access', 1530975132);
+('m180707_130819_add_date_column_to_access', 1530975132),
+('m180716_221030_user_log', 1531783673);
 
 -- --------------------------------------------------------
 
@@ -115,6 +116,27 @@ INSERT INTO `users` (`id`, `login`, `password`) VALUES
 (2, 'Вася', '12345'),
 (3, 'Петя', '12345'),
 (4, 'Маша', '12345');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `user_log`
+--
+
+CREATE TABLE `user_log` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `logged_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `user_log`
+--
+
+INSERT INTO `user_log` (`id`, `user_id`, `logged_at`) VALUES
+(1, 4, '2018-07-17 10:55:11'),
+(2, 2, '2018-07-17 10:55:27'),
+(3, 1, '2018-07-17 10:55:37');
 
 --
 -- Индексы сохранённых таблиц
@@ -146,6 +168,14 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `id` (`id`);
 
 --
+-- Индексы таблицы `user_log`
+--
+ALTER TABLE `user_log`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id` (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- AUTO_INCREMENT для сохранённых таблиц
 --
 
@@ -166,6 +196,12 @@ ALTER TABLE `calendar`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT для таблицы `user_log`
+--
+ALTER TABLE `user_log`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
